@@ -1,30 +1,29 @@
 # peanorust
 
-Small educational Rust project that implements **Peano numbers** (natural numbers built from:
+Educational playground for exploring "number systems" and how you can build a small **number tower** from simple constructions.
+
+It starts with **Peano naturals** (natural numbers built from:
 
 - `Zero`
 - `Succ(n)` (the successor of `n`)
 
-This is a classic way to represent natural numbers using only two constructors.
+and then builds outward to:
+
+- `N` naturals (Peano)
+- `Z` integers
+- `Q` rationals
+- `R` computable reals (interval/Cauchy-style approximation)
+- `C` complex numbers
 
 ## What’s in here
 
-The core type is:
+The implementation is split by stage:
 
-- `enum Peano { Zero, Succ(Box<Peano>) }`
-
-And a few operations implemented recursively:
-
-- `add(&self, other: &Peano) -> Box<Peano>`: Peano addition
-  - `0 + m = m`
-  - `S(n) + m = S(n + m)`
-- `greater_than(&self, other: &Peano) -> bool`: strict comparison
-  - `0 > _` is `false`
-  - `S(_) > 0` is `true`
-  - `S(n) > S(m)` reduces to `n > m`
-- `to_usize(&self) -> usize`: converts the Peano representation into a normal integer for printing
-
-`Box<Peano>` is used so the recursive `Succ` variant has a known size.
+- `src/n.rs` (`N`)
+- `src/z.rs` (`Z`)
+- `src/q.rs` (`Q`)
+- `src/r.rs` (`R`)
+- `src/c.rs` (`C`)
 
 ## Run it
 
@@ -32,13 +31,15 @@ And a few operations implemented recursively:
 cargo run
 ```
 
-You should see output similar to:
+The output is a pile of small demos for each stage.
 
-- `Three as usize: 3`
-- `one > two: false`
+## Docs
+
+- `docs/00-what-we-have.md`: what is implemented right now
+- `docs/01-what-could-be-next.md`: common "next" number systems/structures after `C`
+- `docs/02-searching-the-space.md`: how you could model/search the space of constructions and properties
 
 ## Notes
 
 - This is intentionally recursive and not optimized; it’s meant as a learning example.
 - Built with the Rust 2024 edition (see `Cargo.toml`).
-
