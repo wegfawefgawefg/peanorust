@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::fmt;
 
 use crate::n::Nat;
@@ -34,6 +35,22 @@ impl Rat {
 
     pub fn is_zero(&self) -> bool {
         self.num.is_zero()
+    }
+
+    pub fn is_negative(&self) -> bool {
+        self.num.is_negative()
+    }
+
+    pub fn from_int(i: Int) -> Rat {
+        Rat::new(i, Nat::one()).expect("den != 0")
+    }
+
+    pub fn abs(&self) -> Rat {
+        if self.is_negative() {
+            self.neg()
+        } else {
+            self.clone()
+        }
     }
 
     fn normalized(mut self) -> Rat {
@@ -111,6 +128,30 @@ impl Rat {
         }
         let den = self.den.mul(&abs_c);
         Rat::new(num, den)
+    }
+
+    pub fn cmp_rat(&self, other: &Rat) -> Ordering {
+        // Compare a/b and c/d by comparing ad and cb (denominators are > 0).
+        let a = &self.num;
+        let b = &self.den;
+        let c = &other.num;
+        let d = &other.den;
+
+        let ad = a.mul(&Int::from_nat(d.clone()));
+        let cb = c.mul(&Int::from_nat(b.clone()));
+        ad.cmp(&cb)
+    }
+}
+
+impl PartialOrd for Rat {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp_rat(other))
+    }
+}
+
+impl Ord for Rat {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.cmp_rat(other)
     }
 }
 

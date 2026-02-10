@@ -58,7 +58,7 @@ fn main() {
     println!("-2/3 * 3/4 = {}", neg_two_thirds.mul(&three_fourths));
     println!("(1/2) / (1/3) = {}", one_half.div(&one_third).unwrap());
 
-    println!("\n== R (Real subset: rationals) ==");
+    println!("\n== R (Cauchy/interval reals; rationals are points) ==");
     let r1 = Real::from_rat(one_half.clone());
     let r2 = Real::from_rat(one_third.clone());
     println!("1/2 + 1/3 = {}", r1.add(&r2));

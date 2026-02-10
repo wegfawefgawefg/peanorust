@@ -3,7 +3,7 @@ use std::fmt;
 use crate::r::Real;
 
 // Complex numbers (C) built on top of our "Real" stage.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug)]
 pub struct Complex {
     pub re: Real,
     pub im: Real,

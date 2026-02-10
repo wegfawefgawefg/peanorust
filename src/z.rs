@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::fmt;
 
 use crate::n::Nat;
@@ -88,6 +89,32 @@ impl Int {
         let ad = a.mul(&d);
         let bc = b.mul(&c);
         Int::from_diff(ac.add(&bd), ad.add(&bc))
+    }
+
+    pub fn cmp_int(&self, other: &Int) -> Ordering {
+        match (self, other) {
+            (Int::Neg(a), Int::Neg(b)) => b.cmp(a), // more negative = smaller
+            (Int::Neg(_), Int::Zero) => Ordering::Less,
+            (Int::Neg(_), Int::Pos(_)) => Ordering::Less,
+            (Int::Zero, Int::Neg(_)) => Ordering::Greater,
+            (Int::Zero, Int::Zero) => Ordering::Equal,
+            (Int::Zero, Int::Pos(_)) => Ordering::Less,
+            (Int::Pos(_), Int::Neg(_)) => Ordering::Greater,
+            (Int::Pos(_), Int::Zero) => Ordering::Greater,
+            (Int::Pos(a), Int::Pos(b)) => a.cmp(b),
+        }
+    }
+}
+
+impl PartialOrd for Int {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp_int(other))
+    }
+}
+
+impl Ord for Int {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.cmp_int(other)
     }
 }
 
